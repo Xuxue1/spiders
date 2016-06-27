@@ -121,7 +121,7 @@ public class DownloadNodeControl implements NodeCacheListener,
 
 	public static void main(String[] args)throws Exception{
 
-		final  DownloadMachineZKNode node=new DownloadMachineZKNode("192.168.27.34:2181");
+		final  DownloadMachineZKNode node=new DownloadMachineZKNode("115.28.224.180:2181");
 		final TestTaskCache taskCache=new TestTaskCache();
 		final ResultIteamCache iteamCache=new TestResultIteamCache();
 		final DownloadNodeControl c=new DownloadNodeControl(node,taskCache,iteamCache);
