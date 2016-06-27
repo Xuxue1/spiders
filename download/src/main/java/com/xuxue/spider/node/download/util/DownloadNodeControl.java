@@ -4,6 +4,9 @@ import com.xuxue.spider.core.cache.TestResultIteamCache;
 import com.xuxue.spider.core.cache.TestTaskCache;
 import com.xuxue.spider.core.pipleline.ResultIteam;
 import com.xuxue.spider.core.task.Task;
+import com.xuxue.spider.core.util.SpiderEndException;
+import com.xuxue.spider.core.util.ResultEndException;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.NodeCacheListener;
@@ -12,7 +15,7 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import com.xuxue.spider.core.cache.TaskCache;
 import com.xuxue.spider.core.cache.ResultIteamCache;
 import com.xuxue.spider.core.util.DownloadMachineZKNode;
-
+import org.apache.log4j.Logger;
 
 
 import java.io.IOException;
@@ -21,6 +24,7 @@ import java.io.IOException;
 public class DownloadNodeControl implements NodeCacheListener,
 	PathChildrenCacheListener,TaskCache,ResultIteamCache{
 
+	private final Logger logger=Logger.getLogger(getClass());
 
 	public transient final DownloadMachineZKNode zkNode;
 
@@ -30,7 +34,7 @@ public class DownloadNodeControl implements NodeCacheListener,
 
 	public transient final Object getTaskLock=new Object();
 
-
+	private boolean run=true;
 	
 	private long resultMemory=0;
 
@@ -59,7 +63,7 @@ public class DownloadNodeControl implements NodeCacheListener,
 	}
 
 	@Override
-	public ResultIteam getResult() throws IOException, ClassNotFoundException {
+	public ResultIteam getResult() throws IOException, ClassNotFoundException ,ResultEndException{
 		ResultIteam iteam=resultCache.getResult();
 		return iteam;
 	}
@@ -81,18 +85,40 @@ public class DownloadNodeControl implements NodeCacheListener,
 	}
 
 	@Override
-	public Task getTask() throws IOException, ClassNotFoundException {
+	public Task getTask() throws IOException, ClassNotFoundException,SpiderEndException {
 		synchronized (getTaskLock){
 			this.processedTask+=1;
-			return this.taskCache.getTask();
+
+			try{
+				return this.taskCache.getTask();
+			}catch (SpiderEndException e){
+				try{
+					getTaskLock.wait();
+				}catch (InterruptedException ee){
+					logger.info("等待是中断",ee);
+					throw new SpiderEndException(ee);
+				}
+
+				return getTask();
+			}
 		}
 	}
 
 	@Override
-	public Task getTask(String host) throws IOException, ClassNotFoundException {
-		synchronized(getTaskLock){
+	public Task getTask(String host) throws IOException, ClassNotFoundException,SpiderEndException {
+		synchronized (getTaskLock){
 			this.processedTask+=1;
-			return this.taskCache.getTask(host);
+			try{
+				return this.taskCache.getTask(host);
+			}catch (SpiderEndException e){
+				try{
+					getTaskLock.wait();
+				}catch (InterruptedException ee){
+					logger.info("等待是中断",ee);
+					throw new SpiderEndException(ee);
+				}
+				return getTask(host);
+			}
 		}
 	}
 
