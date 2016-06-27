@@ -4,6 +4,8 @@ import com.xuxue.spider.core.cache.TestResultIteamCache;
 import com.xuxue.spider.core.cache.TestTaskCache;
 import com.xuxue.spider.core.pipleline.ResultIteam;
 import com.xuxue.spider.core.task.Task;
+import com.xuxue.spider.core.tools.ByteToObject;
+import com.xuxue.spider.core.util.DownloadNodeState;
 import com.xuxue.spider.core.util.SpiderEndException;
 import com.xuxue.spider.core.util.ResultEndException;
 
@@ -34,7 +36,10 @@ public class DownloadNodeControl implements NodeCacheListener,
 
 	public transient final Object getTaskLock=new Object();
 
-	private boolean run=true;
+    /**
+     * 表示这个节点的状态
+     */
+    private DownloadNodeState state;
 	
 	private long resultMemory=0;
 
@@ -84,11 +89,17 @@ public class DownloadNodeControl implements NodeCacheListener,
 		this.taskCache.putTask(task);
 	}
 
+	/**
+	 *
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws SpiderEndException
+     */
 	@Override
 	public Task getTask() throws IOException, ClassNotFoundException,SpiderEndException {
 		synchronized (getTaskLock){
 			this.processedTask+=1;
-
 			try{
 				return this.taskCache.getTask();
 			}catch (SpiderEndException e){
@@ -98,11 +109,28 @@ public class DownloadNodeControl implements NodeCacheListener,
 					logger.info("等待是中断",ee);
 					throw new SpiderEndException(ee);
 				}
-
 				return getTask();
 			}
 		}
 	}
+
+
+    private void checkNodeState()throws SpiderEndException{
+        if(this.state==DownloadNodeState.ALIVE){
+            return;
+        }else if(this.state==DownloadNodeState.STOP){
+            throw new SpiderEndException();
+        }else if(this.state==DownloadNodeState.WAIT){
+            synchronized (getTaskLock){
+                try{
+                    getTaskLock.wait();
+                }catch (InterruptedException e){
+                    logger.info("",e);
+                    throw new SpiderEndException(e);
+                }
+            }
+        }
+    }
 
 	@Override
 	public Task getTask(String host) throws IOException, ClassNotFoundException,SpiderEndException {
@@ -126,7 +154,14 @@ public class DownloadNodeControl implements NodeCacheListener,
 	@Override
 	public void nodeChanged() throws Exception {
 		ChildData data=zkNode.nodeCache.getCurrentData();
-		System.out.println(new String(data.getData()));
+		byte[] response=data.getData();
+        DownloadNodeState sta= ByteToObject.getObject(response);
+        this.state=sta;
+        if(sta==DownloadNodeState.ALIVE){
+            synchronized (getTaskLock) {
+                getTaskLock.notifyAll();
+            }
+        }
 	}
 
 	@Override
@@ -165,4 +200,5 @@ public class DownloadNodeControl implements NodeCacheListener,
 
 		Thread.sleep(Integer.MAX_VALUE);
 	}
+
 }
