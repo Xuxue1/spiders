@@ -1,6 +1,7 @@
 package com.xuxue.spider.core.cache;
 
 import com.xuxue.spider.core.task.Task;
+import com.xuxue.spider.core.util.SpiderEndException;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ public class TestTaskCache implements TaskCache {
     private long size;
 
     public TestTaskCache(){
-        tasks=new LinkedList<>();
+        tasks=new LinkedList<byte[]>();
     }
 
 
@@ -33,7 +34,7 @@ public class TestTaskCache implements TaskCache {
     }
 
     @Override
-    public Task getTask() throws IOException,ClassNotFoundException{
+    public Task getTask() throws IOException,ClassNotFoundException,SpiderEndException{
         byte[] data=tasks.remove();
         Task task=Task.toTask(data);
         return task;

@@ -2,6 +2,7 @@ package com.xuxue.spider.core.cache;
 
 import com.xuxue.spider.core.pipleline.ResultIteam;
 import com.xuxue.spider.core.tools.ByteToObject;
+import com.xuxue.spider.core.util.ResultEndException;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -29,7 +30,7 @@ public class TestResultIteamCache implements ResultIteamCache {
     }
 
     @Override
-    public synchronized ResultIteam getResult() throws IOException,ClassNotFoundException{
+    public synchronized ResultIteam getResult() throws IOException,ClassNotFoundException,ResultEndException{
         byte[] data=iteams.remove();
         size-=data.length;
         return ByteToObject.getObject(data);
