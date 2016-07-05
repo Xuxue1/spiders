@@ -43,8 +43,12 @@ object StreamReader {
     * @param args
     */
   def main(args: Array[String]): Unit = {
-    new {
-      self =>
-    }
+    val a=1f
+    val b=2f
+    println(a/b)
   }
+
+  /**
+    * 传统火灾预警方式有相应时间慢、火灾识别不准确，敏感度低、环境要求高等缺点
+    */
 }

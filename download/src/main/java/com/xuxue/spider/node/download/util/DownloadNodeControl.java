@@ -3,6 +3,7 @@ package com.xuxue.spider.node.download.util;
 import com.xuxue.spider.core.cache.TestResultIteamCache;
 import com.xuxue.spider.core.cache.TestTaskCache;
 import com.xuxue.spider.core.pipleline.ResultIteam;
+import com.xuxue.spider.core.proxy.ProxyManager;
 import com.xuxue.spider.core.task.Task;
 import com.xuxue.spider.core.tools.ByteToObject;
 import com.xuxue.spider.core.util.DownloadNodeState;
@@ -17,6 +18,7 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import com.xuxue.spider.core.cache.TaskCache;
 import com.xuxue.spider.core.cache.ResultIteamCache;
 import com.xuxue.spider.core.util.DownloadMachineZKNode;
+import org.apache.http.HttpHost;
 import org.apache.log4j.Logger;
 
 
@@ -24,7 +26,7 @@ import java.io.IOException;
 
 
 public class DownloadNodeControl implements NodeCacheListener,
-	PathChildrenCacheListener,TaskCache,ResultIteamCache{
+	PathChildrenCacheListener,TaskCache,ResultIteamCache,ProxyManager{
 
 	private final Logger logger=Logger.getLogger(getClass());
 
@@ -201,4 +203,13 @@ public class DownloadNodeControl implements NodeCacheListener,
 		Thread.sleep(Integer.MAX_VALUE);
 	}
 
+	@Override
+	public HttpHost getProxy() {
+		return null;
+	}
+
+	@Override
+	public HttpHost backProxy() {
+		return null;
+	}
 }
