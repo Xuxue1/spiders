@@ -1,9 +1,7 @@
 package com.xuxue.spider.test.client;
 
-import java.awt.*;
-import java.util.ArrayList;
 
-import com.xuxue.spider.test.akka.Test;
+import java.util.ArrayList;
 
 /**
  * Created by HanHan on 2016/6/14.
