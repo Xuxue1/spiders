@@ -175,8 +175,8 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-6" />
-    <option name="y" value="1" />
+    <option name="x" value="-7" />
+    <option name="y" value="2" />
     <option name="width" value="1378" />
     <option name="height" value="733" />
   </component>
@@ -883,7 +883,7 @@
       <workItem from="1467466674272" duration="1267000" />
       <workItem from="1467541919398" duration="3590000" />
       <workItem from="1467706470398" duration="6302000" />
-      <workItem from="1467721711951" duration="8057000" />
+      <workItem from="1467721711951" duration="8647000" />
     </task>
     <task id="LOCAL-00001" summary="实验室 2016-6-27">
       <created>1467020257323</created>
@@ -945,10 +945,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="203804000" />
+    <option name="totallyTimeSpent" value="204394000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="1" width="1378" height="733" extended-state="0" />
+    <frame x="-7" y="2" width="1378" height="733" extended-state="1" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1292,7 +1292,7 @@
         <state relative-caret-position="286">
           <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
           <folding>
-            <element signature="e#42#102#0" expanded="true" />
+            <element signature="e#42#102#0" expanded="false" />
           </folding>
         </state>
       </provider>
