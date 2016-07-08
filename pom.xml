@@ -95,14 +95,7 @@
       <artifactId>httpclient</artifactId>
       <version>4.5.1</version>
     </dependency>
-
-    <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>1.6.1</version>
-    </dependency>
-
+	
 
     <dependency>
       <groupId>org.jsoup</groupId>
@@ -116,7 +109,7 @@
     <defaultGoal>install</defaultGoal>
     <plugins>
 
-      <!-- the Maven compiler plugin will compile Java source files -->
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
