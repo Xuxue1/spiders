@@ -28,8 +28,6 @@ trait Task extends Writeable{
 
   val id:Int
 
-  val size=toBytes().get.length
-
   def buildURIRequest(httpHost:HttpHost):Try[HttpUriRequest]
 
   def buildURIRequest():Try[HttpUriRequest]={

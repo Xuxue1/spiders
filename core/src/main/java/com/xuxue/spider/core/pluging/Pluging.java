@@ -1,6 +1,5 @@
 package com.xuxue.spider.core.pluging;
 
-import com.sun.javafx.geom.Line2D;
 import com.xuxue.spider.core.pipleline.ResultIteam;
 import com.xuxue.spider.core.task.Task;
 
